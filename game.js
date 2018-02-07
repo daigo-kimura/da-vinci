@@ -68,10 +68,10 @@ function setUpUIMove(board, vuls) {
     return;
   }
 
-  $('#message').text('石を動かして下さい');
+  $('#message').text('石を動かして下さい（残り石' + countStone(board) + '個）');
   vuls.forEach(function (v) {
     $('#move-button').append(
-      $('<input type="button" class="btn">')
+      $('<input type="button" class="square_btn">')
       .val(function () {
         return v.pos[0] + ' - ' + v.pos[1] + ': ' + v.drc_str;
       })
