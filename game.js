@@ -5,19 +5,20 @@ var HEIGHT = 480;
 var V_PAD = 60; // px
 var H_PAD = 60; // px
 
-var STONE_R = 10; // px
+var STONE_R = 16; // px
 
 $(function() {
-  console.log("loaded");
+  console.log('loaded');
   var board = initGame();
   board[[0, 0]] = 0;
-  drawBoard(board);
-  vuls = vulnerables(board);
+
+  var vuls = vulnerables(board);
+  drawBoard(board, vuls);
   setUpUIMove(board, vuls);
 });
 
 function initGame() {
-  console.log("init game");
+  console.log('init game');
   var board = {};
 
   for (var i = 0; i < LEVEL; i++) {
@@ -40,14 +41,13 @@ function countStone(board) {
   return count;
 }
 
-
 function drawBoard(board) {
-  var ctx = document.getElementById("cv").getContext("2d");
+  var ctx = document.getElementById('cv').getContext('2d');
 
   for (var i = 0; i < LEVEL; i++) {
     for (var j = 0; j < i + 1; j++) {
-      x = (WIDTH - i * H_PAD) / 2 + j * V_PAD;
-      y = V_PAD * (i + 1);
+      var x = (WIDTH - i * H_PAD) / 2 + j * V_PAD;
+      var y = V_PAD * (i + 1);
       if (board[[i, j]] == 1) {
         ctx.beginPath();
         ctx.arc(x, y, STONE_R, 0, Math.PI * 2, false);
@@ -62,13 +62,13 @@ function drawBoard(board) {
 }
 
 function setUpUIMove(board, vuls) {
-  console.log('set up UI')
+  console.log('set up UI');
   if (vuls.length == 0) {
-    $('#message').text('Cant move anymore.');
+    $('#message').text('動かせる石がありません');
     return;
   }
 
-  $('#message').text('Choose your move.');
+  $('#message').text('石を動かして下さい');
   vuls.forEach(function (v) {
     $('#move-button').append(
       $('<input type="button" class="btn">')
@@ -78,7 +78,7 @@ function setUpUIMove(board, vuls) {
       .click(function () {
         move(board, v.pos, v.drc_str);
         $('#cv').empty();
-        var ctx = document.getElementById("cv").getContext("2d");
+        var ctx = document.getElementById('cv').getContext('2d');
         ctx.clearRect(0, 0, WIDTH, HEIGHT);
         $('#move-button').empty();
         drawBoard(board);
@@ -99,27 +99,27 @@ function vulnerables(board) {
 
       if ([[i - 1, j]] in board && [[i - 2, j]] in board
         && board[[i - 1, j]] == 1 && board[[i - 2, j]] == 0) {
-        vuls.push({ pos: [i, j], drc_str: "↗"})
+        vuls.push({ pos: [i, j], drc_str: '↗'});
       }
       if ([[i + 1, j]] in board && [[i + 2, j]] in board
-        && board[[i + 1, j]] == 1 && board[[i + 2, j]] == 0) { pos:
-        vuls.push({ pos: [i, j], drc_str: "↙"})
+        && board[[i + 1, j]] == 1 && board[[i + 2, j]] == 0) {
+        vuls.push({ pos: [i, j], drc_str: '↙'});
       }
       if ([[i, j + 1]] in board && [[i, j + 2]] in board
-        && board[[i, j + 1]] == 1 && board[[i, j + 2]] == 0) { pos:
-        vuls.push({ pos: [i, j], drc_str: "→"})
+        && board[[i, j + 1]] == 1 && board[[i, j + 2]] == 0) {
+        vuls.push({ pos: [i, j], drc_str: '→'});
       }
       if ([[i, j - 1]] in board && [[i, j - 2]] in board
         && board[[i, j - 1]] == 1 && board[[i, j - 2]] == 0) {
-        vuls.push({ pos: [i, j], drc_str: "←"})
+        vuls.push({ pos: [i, j], drc_str: '←'});
       }
       if ([[i - 1, j - 1]] in board && [[i - 1, j - 1]] in board
         && board[[i - 1, j - 1]] == 1 && board[[i - 2, j - 2]] == 0) {
-        vuls.push({ pos: [i, j], drc_str: "↖"})
+        vuls.push({ pos: [i, j], drc_str: '↖'});
       }
       if ([[i + 1, j + 1]] in board && [[i + 2, j + 2]] in board
         && board[[i + 1, j + 1]] == 1 && board[[i + 2, j + 2]] == 0) {
-        vuls.push({ pos: [i, j], drc_str: "↘"})
+        vuls.push({ pos: [i, j], drc_str: '↘'});
       }
     }
   }
@@ -128,40 +128,40 @@ function vulnerables(board) {
 }
 
 function move(board, pos, drc) {
-  console.log(pos)
-  console.log(drc)
-  i = pos[0];
-  j = pos[1];
+  console.log(pos);
+  console.log(drc);
+  var i = pos[0];
+  var j = pos[1];
   if (board[[i, j]] == 0) {
     return board;
   }
 
-  if (drc === "↗" && [[i - 1, j]] in board && [[i - 2, j]] in board
+  if (drc === '↗' && [[i - 1, j]] in board && [[i - 2, j]] in board
     && board[[i - 1, j]] == 1 && board[[i - 2, j]] == 0) {
     board[[i - 1, j]] = 0;
     board[[i - 2, j]] = 1;
   }
-  if (drc === "↙" && [[i + 1, j]] in board && [[i + 2, j]] in board
-    && board[[i + 1, j]] == 1 && board[[i + 2, j]] == 0) { pos:
+  if (drc === '↙' && [[i + 1, j]] in board && [[i + 2, j]] in board
+    && board[[i + 1, j]] == 1 && board[[i + 2, j]] == 0) {
     board[[i + 1, j]] = 0;
     board[[i + 2, j]] = 1;
   }
-  if (drc === "→" && [[i, j + 1]] in board && [[i, j + 2]] in board
-    && board[[i, j + 1]] == 1 && board[[i, j + 2]] == 0) { pos:
+  if (drc === '→' && [[i, j + 1]] in board && [[i, j + 2]] in board
+    && board[[i, j + 1]] == 1 && board[[i, j + 2]] == 0) {
     board[[i, j + 1]] = 0;
     board[[i, j + 2]] = 1;
   }
-  if (drc === "←" && [[i, j - 1]] in board && [[i, j - 2]] in board
+  if (drc === '←' && [[i, j - 1]] in board && [[i, j - 2]] in board
     && board[[i, j - 1]] == 1 && board[[i, j - 2]] == 0) {
     board[[i, j - 1]] = 0;
     board[[i, j - 2]] = 1;
   }
-  if (drc === "↖" && [[i - 1, j - 1]] in board && [[i - 2, j - 2]] in board
+  if (drc === '↖' && [[i - 1, j - 1]] in board && [[i - 2, j - 2]] in board
     && board[[i - 1, j - 1]] == 1 && board[[i - 2, j - 2]] == 0) {
     board[[i - 1, j - 1]] = 0;
     board[[i - 2, j - 2]] = 1;
   }
-  if (drc === "↘" && [[i + 1, j + 1]] in board && [[i + 2, j + 2]] in board
+  if (drc === '↘' && [[i + 1, j + 1]] in board && [[i + 2, j + 2]] in board
     && board[[i + 1, j + 1]] == 1 && board[[i + 2, j + 2]] == 0) {
     board[[i + 1, j + 1]] = 0;
     board[[i + 2, j + 2]] = 1;
