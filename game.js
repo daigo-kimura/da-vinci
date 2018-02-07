@@ -42,7 +42,7 @@ function countStone(board) {
 }
 
 function drawBoard(board) {
-  var ctx = document.getElementById('cv').getContext('2d');
+  var ctx = $('#cv')[0].getContext('2d');
 
   for (var i = 0; i < LEVEL; i++) {
     for (var j = 0; j < i + 1; j++) {
@@ -78,8 +78,7 @@ function setUpUIMove(board, vuls) {
       .click(function () {
         move(board, v.pos, v.drc_str);
         $('#cv').empty();
-        var ctx = document.getElementById('cv').getContext('2d');
-        ctx.clearRect(0, 0, WIDTH, HEIGHT);
+        $('#cv')[0].getContext('2d').clearRect(0, 0, WIDTH, HEIGHT);
         $('#move-button').empty();
         drawBoard(board);
         vuls = vulnerables(board);
